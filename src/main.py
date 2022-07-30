@@ -4,6 +4,7 @@ main module: entry point of the API
 
 import sys
 import os
+import json
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -70,6 +71,147 @@ app = FastAPI(
 def home():
     """redirect user to the swagger api"""
     return RedirectResponse("/docs")
+
+
+@app.post(
+    f"/{GOOGLE}/", summary=get_summary(GOOGLE)
+)
+def google_translate(r: GoogleRequest):
+    """
+    Use google translator to translate a text
+
+    - **source**: language to translate from
+    - **target**: target language to translate to
+    - **text**: text you want to translate
+    - **proxies**: proxies you want to use (optional)
+    """
+    langitems = [
+    "af",
+    "sq",
+    "am",
+    "ar",
+    "hy",
+    "az",
+    "eu",
+    "be",
+    "bn",
+    "bs",
+    "bg",
+    "ca",
+    "ceb",
+    "ny",
+    "zh-CN",
+    "zh-TW",
+    "co",
+    "hr",
+    "cs",
+    "da",
+    "nl",
+    "en",
+    "eo",
+    "et",
+    "tl",
+    "fi",
+    "fr",
+    "fy",
+    "gl",
+    "ka",
+    "de",
+    "el",
+    "gu",
+    "ht",
+    "ha",
+    "haw",
+    "iw",
+    "hi",
+    "hmn",
+    "hu",
+    "is",
+    "ig",
+    "id",
+    "ga",
+    "it",
+    "ja",
+    "jw",
+    "kn",
+    "kk",
+    "km",
+    "rw",
+    "ko",
+    "ku",
+    "ky",
+    "lo",
+    "la",
+    "lv",
+    "lt",
+    "lb",
+    "mk",
+    "mg",
+    "ms",
+    "ml",
+    "mt",
+    "mi",
+    "mr",
+    "mn",
+    "my",
+    "ne",
+    "no",
+    "or",
+    "ps",
+    "fa",
+    "pl",
+    "pt",
+    "pa",
+    "ro",
+    "ru",
+    "sm",
+    "gd",
+    "sr",
+    "st",
+    "sn",
+    "sd",
+    "si",
+    "sk",
+    "sl",
+    "so",
+    "es",
+    "su",
+    "sw",
+    "sv",
+    "tg",
+    "ta",
+    "tt",
+    "te",
+    "th",
+    "tr",
+    "tk",
+    "uk",
+    "ur",
+    "ug",
+    "uz",
+    "vi",
+    "cy",
+    "xh",
+    "yi",
+    "yo",
+    "zu"
+]
+    langs = json.loads(r.data)
+    for lang in langs:
+        # print( get_translation( GoogleTranslator(source="en", target="ta", proxies=r.proxies), lang['message']) )
+        print(lang['message'])
+        print(lang['source'])
+        if lang['target'] in langitems:
+            # print(get_translation( GoogleTranslator(source="en", target="ta", proxies=r.proxies), lang['message'])["translation"])
+            lang['newValue'] = get_translation( GoogleTranslator(source="en", target=lang['target'], proxies=r.proxies), lang['message'])["translation"]
+        else: 
+            lang['newValue'] = get_translation( GoogleTranslator(source="en", target=lang['source'], proxies=r.proxies), lang['message'])["translation"]
+
+    print('csk after that')
+    print(langs)
+    # t = GoogleTranslator(source=r.source, target=r.target, proxies=r.proxies)
+    # return get_translation(t, r.text)
+    return langs
 
 
 @app.post(

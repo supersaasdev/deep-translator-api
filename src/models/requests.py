@@ -8,6 +8,7 @@ class BaseRequest(BaseModel):
     source: str = "auto"
     target: str
     text: str
+    data: str
 
 
 class BaseRequestWithProxies(BaseRequest):
